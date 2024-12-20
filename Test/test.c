@@ -99,12 +99,13 @@ void inputStudent(struct student* sNew)
 int findMaxStudentNumber(struct student* s1)
 {
     struct student* current = s1;
-    int max = 0;
-    while(current->next == NULL)
+    int max = current->student_number;
+    while(current->next != NULL)
     {
         if(current->student_number > max) max = current->student_number;
-        else current = current->next;
-    }
+        current = current->next;
+    } 
+    if(current->next == NULL && current->student_number > max) max = current->student_number;
     return max;
 }
 
@@ -129,16 +130,15 @@ void addStudent(struct student** s1) {
     } else 
     {
         struct student *prev = findPrevForInsertion(sNew, *s1);
-
         sNew->next = prev->next;
         sNew->previous = prev;
+        int max = findMaxStudentNumber(*s1);
         if (prev->next != NULL) 
         {
             prev->next->previous = sNew;
         }
         // Muss noch bearbeitet werden
-        int max = findMaxStudentNumber(*s1);
-        sNew->student_number = sNew->previous->student_number +1;
+        sNew->student_number = max +1;
         prev->next = sNew;
     }
 }
