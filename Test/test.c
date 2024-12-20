@@ -8,7 +8,7 @@ struct Date {
     char month[3]; 
     char year[5];
 };
-
+//Hallo
 struct student {
     char first_name[50];
     char last_name[50];
