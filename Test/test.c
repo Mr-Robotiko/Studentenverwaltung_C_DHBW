@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "error_handling.h"
+#include "error_handling.h" // Selbstgeschriebene Headerfile -> Muss mit geliefert werden
 
 struct Date {
     char day[3]; 
@@ -159,6 +159,47 @@ void printAllStudents(struct student *s1) {
     }
 }
 
+void printSingleStudentInformation(struct student *s1){
+    printf("\nVorname:\t%s", s1->first_name);
+    printf("\nNachname:\t%s", s1->last_name);
+    printf("\nStudienfach:\t%s", s1->course);
+    printf("\nGeburtsdatum:\t%s.%s.%s", s1->birthday.day, s1->birthday.month, s1->birthday.year);
+    printf("\nStartdatum:\t%s.%s.%s", s1->start.day, s1->start.month, s1->start.year);
+    printf("\nEnddatum:\t%s.%s.%s", s1->end.day, s1->end.month, s1->end.year);
+    printf("\nMatrikelnummmer:%d",s1->student_number);
+}
+
+void printStudent(int student_number, struct student* s1)
+{
+    int found = 0;
+    struct student* current = s1;
+
+    if(current->student_number == student_number) {
+        printSingleStudentInformation(s1);
+        found = 1;
+    }
+
+    while(current->next != NULL){
+        if(current->next->student_number == student_number) {
+            printSingleStudentInformation(current->next);
+            found = 1;
+        };
+        current = current->next;
+    }
+    if(found == 0) printf("\n***Matrikelnummer nicht gefunden***");
+
+    // if(current->student_number == student_number) printSingleStudentInformation(s1);
+
+    // while(current->next != NULL)
+    // {
+    //     if(current->student_number == student_number){
+    //         printSingleStudentInformation(s1);
+    //     }
+    //     current = current->next;
+    // }
+    // if(current->next == NULL) printf("\n***Matrikelnummer nicht gefunden***");
+}
+
 void interfaceSwitch(int choice, struct student **s1) {
     int student_number;
 
@@ -167,7 +208,10 @@ void interfaceSwitch(int choice, struct student **s1) {
         addStudent(s1);
         break;
     case '2':
-        //printStudent()
+        printf("------------------- <2> Studenten anzeigen <4> -------------------");
+        printf("\nWelchen Studenten möchten Sie angezeigt bekommen (Matrikelnummer): ");
+        scanf("%d", &student_number);
+        printStudent(student_number, *s1);
         break;
     case '3':
         printAllStudents(*s1);
