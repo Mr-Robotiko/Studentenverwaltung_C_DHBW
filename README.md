@@ -3,7 +3,7 @@ Studentenverwaltung in C
 
 ## Anforderungen
 
-### Finale Aufgabe
+### Finale Aufgabe testolos
 Das Programm soll eine Liste von Studenten verarbeiten. Das Programm soll darauf ausgelegt, benutzerfreundlich und intuitiv bedienbar zu sein. Es bietet eine klare und übersichtliche Benutzeroberfläche, die es dem Benutzer ermöglicht, schnell und einfach durch die verschiedenen Funktionen zu navigieren.
 - Benutzerfreundlichkeit:
 Das Programm wurde so gestaltet, dass es auch für weniger erfahrene Benutzer leicht verständlich ist. Alle Eingabefelder sind klar beschriftet, und die Benutzerführung ist logisch strukturiert.
