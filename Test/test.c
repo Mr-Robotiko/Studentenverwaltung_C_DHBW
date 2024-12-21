@@ -46,62 +46,113 @@ int countStudents(struct student *s1) {
     int count = 0;
     struct student *current = s1;
 
-    // Durch die Liste iterieren und die Studenten zählen
     while (current != NULL) {
         count++;
         current = current->next;
     }
 
-    return count;  // Anzahl der Studenten zurückgeben
+    return count;  
 }
 
 
-void inputStudent(struct student* sNew) {
+int inputStudent(struct student* sNew) {
     int checkString = 0;
     int checkDate = 0;
+    int endDateActive = 0;
+
+    // Eingabeaufforderung für den Benutzer
+    printf("----------------- <1> Studenten hinzufuegen <1> -----------------");
+
+    // Vorname
     do {
-        int endDateActive = 0;
-
-        printf("----------------- <1> Studenten hinzufuegen <1> -----------------");
-        printf("\nWie lautet der Vorname?: ");
+        printf("\nGeben Sie 'q' ein, um abzubrechen)\nWie lautet der Vorname?: ");
         scanf("%49s", sNew->first_name);
-        int checkFirstName = checkInputString(sNew->first_name);
-
-        printf("\nWie lautet der Nachname?: ");
-        scanf("%49s", sNew->last_name);
-        int checkLastName = checkInputString(sNew->last_name);
-
-        printf("\nWelches Studienfach wird belegt?: ");
-        scanf("%99s", sNew->course);
-        int checkCourse = checkInputString(sNew->course);
-
-        printf("\nWie lautet das Geburtsdatum? (TT.MM.YYYY): ");
-        scanf("%2s.%2s.%4s", sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
-        int checkBirthday = checkInputDate(sNew->birthday.day, sNew->birthday.month, sNew->birthday.year, endDateActive);
-
-        printf("\nGeben Sie das Startdatum ein (TT.MM.YYYY): ");
-        scanf("%2s.%2s.%4s", sNew->start.day, sNew->start.month, sNew->start.year);
-        int checkStart = checkInputDate(sNew->start.day, sNew->start.month, sNew->start.year, endDateActive);
-
-        printf("\nGeben Sie das Enddatum ein (TT.MM.YYYY): ");
-        scanf("%2s.%2s.%4s", sNew->end.day, sNew->end.month, sNew->end.year);
-        endDateActive = 1;
-        int checkEnd = checkInputDate(sNew->end.day, sNew->end.month, sNew->end.year, endDateActive);
-
-        checkString = checkFirstName || checkLastName || checkCourse; // Checkt, ob ungültige Zeichen im String sind
-        checkDate = 0; //checkBirthday || checkStart || checkEnd; // Checkt, ob das Datum gültig ist
-
-        if(checkString) {
+        if (strcmp(sNew->first_name, "q") == 0) {
+            printf("\nEingabe abgebrochen.\n");
+            return 0;  //Hab abbruch mittendrin eingebaut
+        }
+        checkString = checkInputString(sNew->first_name);
+        if (checkString) {
             printf("\n***Eingabe ungueltig: Nur Buchstaben erlaubt!***\n");
         }
-        if(checkDate) {
-            printf("\n***Eingabe ungueltig: Ungueltiges Datum!***\n");
+    } while (checkString);  
+
+    // Nachname
+    do {
+        printf("\nGeben Sie 'q' ein, um abzubrechen)\nWie lautet der Nachname?: ");
+        scanf("%49s", sNew->last_name);
+        if (strcmp(sNew->last_name, "q") == 0) {
+            printf("\nEingabe abgebrochen.\n");
+            return 0;  //Hab abbruch mittendrin eingebaut
         }
+        checkString = checkInputString(sNew->last_name);
+        if (checkString) {
+            printf("\n***Eingabe ungueltig: Nur Buchstaben erlaubt!***\n");
+        }
+    } while (checkString);  
 
-    } while(checkString || checkDate); // Neue Eingabe wenn nicht valide
+    // Studiengang
+    do {
+        printf("\nGeben Sie 'q' ein, um abzubrechen)\nWelches Studienfach wird belegt?: ");
+        scanf("%99s", sNew->course);
+        if (strcmp(sNew->course, "q") == 0) {
+            printf("\nEingabe abgebrochen.\n");
+            return 0;  //Hab abbruch mittendrin eingebaut
+        }
+        checkString = checkInputString(sNew->course);
+        if (checkString) {
+            printf("\n***Eingabe ungueltig: Nur Buchstaben erlaubt!***\n");
+        }
+    } while (checkString);  
 
-    printf("\n***Neuen Studenten erfolgreich hinzugefuegt***\n"); 
+    // Geburtsdatum
+    do {
+        printf("\nGeben Sie 'q' ein, um abzubrechen)\nWie lautet das Geburtsdatum? (TT.MM.JJJJ): ");
+        scanf("%2s.%2s.%4s", sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
+        if (strcmp(sNew->birthday.day, "q") == 0) {
+            printf("\nEingabe abgebrochen.\n");
+            return 0;  //Hab abbruch mittendrin eingebaut
+        }
+        checkDate = checkInputDate(sNew->birthday.day, sNew->birthday.month, sNew->birthday.year, endDateActive, NULL, NULL, NULL);
+        if (checkDate == 0) {
+            printf("\n***Geburtsdatum ist ungültig!******\n");
+        }
+    } while (checkDate == 0); 
+
+    // Startdatum
+    endDateActive = 2;
+    do {
+        printf("\nGeben Sie 'q' ein, um abzubrechen)\nGeben Sie das Startdatum ein (TT.MM.JJJJ): ");
+        scanf("%2s.%2s.%4s", sNew->start.day, sNew->start.month, sNew->start.year);
+        if (strcmp(sNew->start.day, "q") == 0) {
+            printf("\nEingabe abgebrochen.\n");
+            return 0;  //Hab abbruch mittendrin eingebaut
+        }
+        checkDate = checkInputDate(sNew->start.day, sNew->start.month, sNew->start.year, endDateActive, sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
+        if (checkDate == 0) {
+            printf("\n***Startdatum ist ungültig!******\n");
+        }
+    } while (checkDate == 0);  
+
+    // Enddatum
+    endDateActive = 1;
+    do {
+        printf("\nGeben Sie 'q' ein, um abzubrechen)\nGeben Sie das Enddatum ein (TT.MM.JJJJ): ");
+        scanf("%2s.%2s.%4s", sNew->end.day, sNew->end.month, sNew->end.year);
+        if (strcmp(sNew->end.day, "q") == 0) {
+            printf("\nEingabe abgebrochen.\n");
+            return 0;  //Hab abbruch mittendrin eingebaut
+        }
+        checkDate = checkInputDate(sNew->end.day, sNew->end.month, sNew->end.year, endDateActive, sNew->start.day, sNew->start.month, sNew->start.year);
+        if (checkDate == 0) {
+            printf("\n***Enddatum ist ungültig!***\n");
+        }
+    } while (checkDate == 0); 
+
+    printf("\n***Neuen Studenten erfolgreich hinzugefuegt***\n");
+    return 1;
 }
+
 
 /// @brief Sucht die maximale Studentennummer und gibt sie zurück
 /// @param s1 
@@ -167,7 +218,19 @@ void addStudent(struct student** s1) {
         return;
     }
 
-    inputStudent(sNew);
+    if (inputStudent(sNew) == 0) {
+        printf("Eingabe wurde abgebrochen, daher wird kein Student hinzugefügt.\n");
+        free(sNew);  // Input abgebrochen
+        return; 
+    }
+    
+    // wird aufgerufen, wenn ich in InPut mit q abbreche 
+    if (sNew == NULL) {
+        printf("Eingabe wurde abgebrochen, Speicher für neuen Studenten freigegeben.\n");
+        return; 
+    }
+    
+    
 
     if (*s1 == NULL) 
     {

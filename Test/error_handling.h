@@ -10,15 +10,20 @@ int checkInputString(char *input) {
     return 0; // Gültiger String
 }
 
-int checkInputDate(char *day, char *month, char *year, int endDate) {
+
+int checkInputDate(char *day, char *month, char *year, int endDate, char *compareday, char *comparemonth, char *compareyear) {
     int intDay = atoi(day);
     int intMonth = atoi(month);
     int intYear = atoi(year);
+ 
 
-    // Überprüfe gültigen Bereich des Jahres
-    if ((intYear < 1980 || intYear > 2024) && endDate == 0) return 0;
+    // Überprüfe gültigen Bereich des Geburtsjahres
+    if ((intYear < 1960 || intYear > 2024) && endDate == 0) return 0;
 
-    // Überprüft Enddatum
+    // Überprüfe gültigen Bereich des Startjahres
+    if ((intYear < 1980 || intYear > 2024) && endDate == 2) return 0;
+
+   // Überprüfe gültigen Bereich des Endjahres
     if((intYear <=2024 || intYear >= 2028) && endDate == 1) return 0;
 
     // Überprüfe gültigen Bereich des Monats
@@ -37,6 +42,52 @@ int checkInputDate(char *day, char *month, char *year, int endDate) {
 
     // Überprüfe gültigen Bereich des Tages in Bezug auf den Monat
     if (intDay > daysInMonth[intMonth - 1]) return 0;
+
+    //Überprüft Geburtsdatum < Startdatum
+
+    if (endDate == 2) {
+    int compareDay = atoi(compareday);
+    int compareMonth = atoi(comparemonth);
+    int compareYear = atoi(compareyear);
+
+     if (intYear < compareYear) {
+        return 0;
+    }
+    if (intYear == compareYear) {
+        if (intMonth < compareMonth) {
+            return 0; 
+        }
+        if (intMonth == compareMonth) {
+    
+            if (intDay < compareDay) {
+                return 0; 
+            }
+        }
+    }
+} 
+    // Überprüft Startdatum < Enddatum
+    if (endDate == 1) {
+    int compareDay = atoi(compareday);
+    int compareMonth = atoi(comparemonth);
+    int compareYear = atoi(compareyear);
+
+    // Vergleiche Jahr, Monat und Tag für Enddatum vs. Startdatum
+     if (intYear < compareYear) {
+        return 0;
+    }
+    if (intYear == compareYear) {
+        if (intMonth < compareMonth) {
+            return 0; 
+        }
+        if (intMonth == compareMonth) {
+    
+            if (intDay < compareDay) {
+                return 0; 
+            }
+        }
+    }
+} 
+
 
     return 1; // Datum ist gültig
 }
