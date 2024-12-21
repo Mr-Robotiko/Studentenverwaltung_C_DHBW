@@ -91,6 +91,44 @@ int findMaxStudentNumber(struct student* s1)
     return max;
 }
 
+void deleteStudent(int student_number, struct student **s1) {
+    struct student *current = *s1;
+
+    // Fall: Die Liste ist leer
+    if (current == NULL) {
+        printf("\n***Keine Studenten in der Liste***\n");
+        return;
+    }
+
+    while (current != NULL) {
+        if (current->student_number == student_number) {
+            // Wenn es das erste Element ist, aktualisiere den Kopf der Liste
+            if (current == *s1) {
+                *s1 = current->next;
+                if (*s1 != NULL) {
+                    (*s1)->previous = NULL;
+                }
+            // Ansonsten Lösche Element der Liste
+            } else {
+                if (current->previous != NULL) {
+                    current->previous->next = current->next;
+                }
+                if (current->next != NULL) {
+                    current->next->previous = current->previous;
+                }
+            }
+            free(current);
+            printf("\n***Student erfolgreich gelöscht***\n");
+            return;
+        }
+        current = current->next;
+    }
+    printf("\n***Studentennummer nicht gefunden***\n");
+}
+
+
+
+
 /// @brief Fügt ein Student in die verkettete Liste ein
 /// @param s1 
 void addStudent(struct student** s1) {
@@ -187,21 +225,10 @@ void printStudent(int student_number, struct student* s1)
         current = current->next;
     }
     if(found == 0) printf("\n***Matrikelnummer nicht gefunden***");
-
-    // if(current->student_number == student_number) printSingleStudentInformation(s1);
-
-    // while(current->next != NULL)
-    // {
-    //     if(current->student_number == student_number){
-    //         printSingleStudentInformation(s1);
-    //     }
-    //     current = current->next;
-    // }
-    // if(current->next == NULL) printf("\n***Matrikelnummer nicht gefunden***");
 }
 
 void interfaceSwitch(int choice, struct student **s1) {
-    int student_number;
+    int student_number = 0;
 
     switch (choice) {
     case '1':
@@ -220,8 +247,7 @@ void interfaceSwitch(int choice, struct student **s1) {
         printf("------------------- <4> Studenten loeschen <4> -------------------");
         printf("\nWelchen Studenten moechten Sie loeschen (Matrikelnummer): ");
         scanf("%d", &student_number);
-        //deleteStudent(student_number, s1);
-        printf("\n***Studenten erfolgreich aus dem System geloescht***\n");
+        deleteStudent(student_number, s1);
         break;
     case 'x':
         printf("\n---------- <x> Programm wird beendet. Bitte warten. <x> ----------\n");
