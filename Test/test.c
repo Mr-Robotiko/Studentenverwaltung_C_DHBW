@@ -37,11 +37,12 @@ struct student* findPrevForInsertion(struct student* sNew, struct student* s1)
     return current;
 }
 
-void inputStudent(struct student* sNew) 
-{
+void inputStudent(struct student* sNew) {
     int checkString = 0;
     int checkDate = 0;
-    do{
+    do {
+        int endDateActive = 0;
+
         printf("----------------- <1> Studenten hinzufuegen <1> -----------------");
         printf("\nWie lautet der Vorname?: ");
         scanf("%49s", sNew->first_name);
@@ -57,23 +58,32 @@ void inputStudent(struct student* sNew)
 
         printf("\nWie lautet das Geburtsdatum? (TT.MM.YYYY): ");
         scanf("%2s.%2s.%4s", sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
-        int chekBirthday = checkInputDate(sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
+        int checkBirthday = checkInputDate(sNew->birthday.day, sNew->birthday.month, sNew->birthday.year, endDateActive);
 
         printf("\nGeben Sie das Startdatum ein (TT.MM.YYYY): ");
         scanf("%2s.%2s.%4s", sNew->start.day, sNew->start.month, sNew->start.year);
-        int checkStart = checkInputDate(sNew->start.day, sNew->start.month, sNew->start.year);
-        
+        int checkStart = checkInputDate(sNew->start.day, sNew->start.month, sNew->start.year, endDateActive);
+
         printf("\nGeben Sie das Enddatum ein (TT.MM.YYYY): ");
         scanf("%2s.%2s.%4s", sNew->end.day, sNew->end.month, sNew->end.year);
-        int checkEnd = checkInputDate(sNew->end.day, sNew->end.month, sNew->end.year);
+        endDateActive = 1;
+        int checkEnd = checkInputDate(sNew->end.day, sNew->end.month, sNew->end.year, endDateActive);
 
-        checkString = checkFirstName || checkLastName || checkCourse; // Checkt, ob Nummern im String sind
-        //checkDate = chekBirthday || checkStart || checkEnd; // Checkt, ob Datum in Eingabe ist
-        if(checkString) printf("\n***Eingabe ungueltig***\n");
-        else printf("\n***Neuen Studenten erfolgreich hinzugefuegt***\n"); 
-        
-    }while(checkString); // Neue Eingabe wenn nicht Valide
+        checkString = checkFirstName || checkLastName || checkCourse; // Checkt, ob ungültige Zeichen im String sind
+        checkDate = checkBirthday || checkStart || checkEnd; // Checkt, ob das Datum gültig ist
+
+        if(checkString) {
+            printf("\n***Eingabe ungueltig: Nur Buchstaben erlaubt!***\n");
+        }
+        if(checkDate) {
+            printf("\n***Eingabe ungueltig: Ungueltiges Datum!***\n");
+        }
+
+    } while(checkString || checkDate); // Neue Eingabe wenn nicht valide
+
+    printf("\n***Neuen Studenten erfolgreich hinzugefuegt***\n"); 
 }
+
 
 /// @brief Sucht die maximale Studentennummer und gibt sie zurück
 /// @param s1 
