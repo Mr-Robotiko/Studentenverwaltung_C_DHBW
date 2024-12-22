@@ -22,9 +22,8 @@ struct student {
 };
 
 struct student* findPrevForInsertion(struct student* sNew, struct student* s1) 
-{
+{    
     struct student *current = s1;
-
     if (strcmp(current->first_name, sNew->first_name) > 0) 
     {
         return NULL;
@@ -58,7 +57,7 @@ int countStudents(struct student *s1) {
 int inputStudent(struct student* sNew) {
     int checkString = 0;
     int checkDate = 0;
-    int endDateActive = 0;
+    int whichDate = 0;
 
     // Eingabeaufforderung für den Benutzer
     printf("----------------- <1> Studenten hinzufuegen <1> -----------------");
@@ -68,7 +67,6 @@ int inputStudent(struct student* sNew) {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nWie lautet der Vorname?: ");
         scanf("%49s", sNew->first_name);
         if (strcmp(sNew->first_name, "q") == 0) {
-            printf("\nEingabe abgebrochen.\n");
             return 0;  //Hab abbruch mittendrin eingebaut
         }
         checkString = checkInputString(sNew->first_name);
@@ -80,9 +78,14 @@ int inputStudent(struct student* sNew) {
     // Nachname
     do {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nWie lautet der Nachname?: ");
-        scanf("%49s", sNew->last_name);
+       // scanf("%49s", sNew->last_name);
+
+        int c; //Buffer clearen
+        while ((c = getchar()) != '\n' && c != EOF);
+
+        fgets(sNew->last_name, sizeof(sNew->last_name), stdin);
+        sNew->last_name[strcspn(sNew->last_name, "\n")] = '\0';
         if (strcmp(sNew->last_name, "q") == 0) {
-            printf("\nEingabe abgebrochen.\n");
             return 0;  //Hab abbruch mittendrin eingebaut
         }
         checkString = checkInputString(sNew->last_name);
@@ -96,7 +99,6 @@ int inputStudent(struct student* sNew) {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nWelches Studienfach wird belegt?: ");
         scanf("%99s", sNew->course);
         if (strcmp(sNew->course, "q") == 0) {
-            printf("\nEingabe abgebrochen.\n");
             return 0;  //Hab abbruch mittendrin eingebaut
         }
         checkString = checkInputString(sNew->course);
@@ -110,40 +112,37 @@ int inputStudent(struct student* sNew) {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nWie lautet das Geburtsdatum? (TT.MM.JJJJ): ");
         scanf("%2s.%2s.%4s", sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
         if (strcmp(sNew->birthday.day, "q") == 0) {
-            printf("\nEingabe abgebrochen.\n");
             return 0;  //Hab abbruch mittendrin eingebaut
         }
-        checkDate = checkInputDate(sNew->birthday.day, sNew->birthday.month, sNew->birthday.year, endDateActive, NULL, NULL, NULL);
+        checkDate = checkInputDate(sNew->birthday.day, sNew->birthday.month, sNew->birthday.year, whichDate, NULL, NULL, NULL);
         if (checkDate == 0) {
             printf("\n***Geburtsdatum ist ungültig!******\n");
         }
     } while (checkDate == 0); 
 
     // Startdatum
-    endDateActive = 2;
+    whichDate = 2;
     do {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nGeben Sie das Startdatum ein (TT.MM.JJJJ): ");
         scanf("%2s.%2s.%4s", sNew->start.day, sNew->start.month, sNew->start.year);
         if (strcmp(sNew->start.day, "q") == 0) {
-            printf("\nEingabe abgebrochen.\n");
             return 0;  //Hab abbruch mittendrin eingebaut
         }
-        checkDate = checkInputDate(sNew->start.day, sNew->start.month, sNew->start.year, endDateActive, sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
+        checkDate = checkInputDate(sNew->start.day, sNew->start.month, sNew->start.year, whichDate, sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
         if (checkDate == 0) {
             printf("\n***Startdatum ist ungültig!******\n");
         }
     } while (checkDate == 0);  
 
     // Enddatum
-    endDateActive = 1;
+    whichDate = 1;
     do {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nGeben Sie das Enddatum ein (TT.MM.JJJJ): ");
         scanf("%2s.%2s.%4s", sNew->end.day, sNew->end.month, sNew->end.year);
         if (strcmp(sNew->end.day, "q") == 0) {
-            printf("\nEingabe abgebrochen.\n");
             return 0;  //Hab abbruch mittendrin eingebaut
         }
-        checkDate = checkInputDate(sNew->end.day, sNew->end.month, sNew->end.year, endDateActive, sNew->start.day, sNew->start.month, sNew->start.year);
+        checkDate = checkInputDate(sNew->end.day, sNew->end.month, sNew->end.year, whichDate, sNew->start.day, sNew->start.month, sNew->start.year);
         if (checkDate == 0) {
             printf("\n***Enddatum ist ungültig!***\n");
         }
@@ -269,6 +268,7 @@ else
 }
 
 int max = findMaxStudentNumber(*s1);
+// Vllt Funktion hinzufügen das wenn 99999999 die Matri ist Fehlermeldung gibt, wer weiß wie pingelig sie ist 
 sNew->student_number = max + 1;
 
     }
