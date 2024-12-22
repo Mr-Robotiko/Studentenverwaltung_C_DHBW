@@ -65,7 +65,12 @@ int inputStudent(struct student* sNew) {
     // Vorname
     do {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nWie lautet der Vorname?: ");
-        scanf("%49s", sNew->first_name);
+        int c; //Buffer clearen
+        while ((c = getchar()) != '\n' && c != EOF);
+
+        fgets(sNew->first_name, sizeof(sNew->first_name), stdin);
+        sNew->first_name[0] = toupper(sNew->first_name[0]);
+        sNew->first_name[strcspn(sNew->first_name, "\n")] = '\0';
         if (strcmp(sNew->first_name, "q") == 0) {
             return 0;  //Hab abbruch mittendrin eingebaut
         }
@@ -78,12 +83,8 @@ int inputStudent(struct student* sNew) {
     // Nachname
     do {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nWie lautet der Nachname?: ");
-       // scanf("%49s", sNew->last_name);
-
-        int c; //Buffer clearen
-        while ((c = getchar()) != '\n' && c != EOF);
-
         fgets(sNew->last_name, sizeof(sNew->last_name), stdin);
+        sNew->last_name[0] = toupper(sNew->last_name[0]);
         sNew->last_name[strcspn(sNew->last_name, "\n")] = '\0';
         if (strcmp(sNew->last_name, "q") == 0) {
             return 0;  //Hab abbruch mittendrin eingebaut
@@ -98,6 +99,7 @@ int inputStudent(struct student* sNew) {
     do {
         printf("\nGeben Sie 'q' ein, um abzubrechen)\nWelches Studienfach wird belegt?: ");
         scanf("%99s", sNew->course);
+        sNew->course[0] = toupper(sNew->course[0]);
         if (strcmp(sNew->course, "q") == 0) {
             return 0;  //Hab abbruch mittendrin eingebaut
         }
@@ -223,13 +225,6 @@ void addStudent(struct student** s1) {
         return; 
     }
     
-    // wird aufgerufen, wenn ich in InPut mit q abbreche 
-    if (sNew == NULL) {
-        printf("Eingabe wurde abgebrochen, Speicher für neuen Studenten freigegeben.\n");
-        return; 
-    }
-    
-    
 
     if (*s1 == NULL) 
     {
@@ -268,8 +263,13 @@ else
 }
 
 int max = findMaxStudentNumber(*s1);
-// Vllt Funktion hinzufügen das wenn 99999999 die Matri ist Fehlermeldung gibt, wer weiß wie pingelig sie ist 
-sNew->student_number = max + 1;
+
+if (sNew->student_number == 99999999)
+{
+    free(sNew);
+    printf("Das System ist voll, neuer Student konnte nicht gespeichert werden");
+    return;
+}else sNew->student_number = max + 1;
 
     }
 }

@@ -6,7 +6,7 @@
 // Überprüft, ob der String nur gültige Zeichen (Buchstaben) enthält
 int checkInputString(char *input) {
     for (int i = 0; i < strlen(input); i++) {
-        if (!isalpha(input[i]) && input[i] != ' ') {
+        if (!isalpha(input[i]) && input[i] != ' ' && input[i]!= '-') {
             return 1; // Ungültiger String
         }
     }
