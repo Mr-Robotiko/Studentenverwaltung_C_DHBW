@@ -460,10 +460,19 @@ void read(struct student **s1) {
     fclose(file);
 }
 
+void freeAllStudents(struct student *s1) {
+    while (s1 != NULL) {
+        struct student *temp = s1;
+        s1 = s1->next;
+        free(temp);
+    }
+}
+
 int main() {
     struct student *s1 = NULL;
     read(&s1); // Alle studenten spawnen
     interface(&s1);
     save(s1); //schnell speichern nicht das unsere schönen Studenten verloren gehen
+    freeAllStudents(s1);
     return 0;
 }
