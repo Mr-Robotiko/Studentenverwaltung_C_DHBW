@@ -241,11 +241,8 @@ if (prev == NULL)
     sNew->next = *s1; 
     sNew->previous = NULL; 
 
-    if (*s1 != NULL) 
-    {
-        (*s1)->previous = sNew; 
-    }
-
+    
+    (*s1)->previous = sNew; 
     *s1 = sNew; // s1 bleibt der Kopf de Liste
 } 
 else 
