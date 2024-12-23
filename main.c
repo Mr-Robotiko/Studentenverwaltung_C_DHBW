@@ -71,7 +71,7 @@ int inputStudent(struct student* sNew) {
         fgets(sNew->first_name, sizeof(sNew->first_name), stdin);
         sNew->first_name[0] = toupper(sNew->first_name[0]);
         sNew->first_name[strcspn(sNew->first_name, "\n")] = '\0';
-        if (strcmp(sNew->first_name, "q") == 0) {
+        if (strcmp(sNew->first_name, "Q") == 0) {
             return 0;  //Hab abbruch mittendrin eingebaut
         }
         checkString = checkInputString(sNew->first_name);
@@ -86,7 +86,7 @@ int inputStudent(struct student* sNew) {
         fgets(sNew->last_name, sizeof(sNew->last_name), stdin);
         sNew->last_name[0] = toupper(sNew->last_name[0]);
         sNew->last_name[strcspn(sNew->last_name, "\n")] = '\0';
-        if (strcmp(sNew->last_name, "q") == 0) {
+        if (strcmp(sNew->last_name, "Q") == 0) {
             return 0;  //Hab abbruch mittendrin eingebaut
         }
         checkString = checkInputString(sNew->last_name);
@@ -100,7 +100,7 @@ int inputStudent(struct student* sNew) {
         printf("\n(Zum Abbrechen: q)\nWelches Studienfach wird belegt?: ");
         scanf("%99s", sNew->course);
         sNew->course[0] = toupper(sNew->course[0]);
-        if (strcmp(sNew->course, "q") == 0) {
+        if (strcmp(sNew->course, "Q") == 0) {
             return 0;  //Hab abbruch mittendrin eingebaut
         }
         checkString = checkInputString(sNew->course);
@@ -287,7 +287,7 @@ void printAllStudents(struct student *s1) {
         printf("\nGeburtsdatum:\t%s.%s.%s", s1->birthday.day, s1->birthday.month, s1->birthday.year);
         printf("\nStartdatum:\t%s.%s.%s", s1->start.day, s1->start.month, s1->start.year);
         printf("\nEnddatum:\t%s.%s.%s", s1->end.day, s1->end.month, s1->end.year);
-        printf("\nMatrikelnr.: %d",s1->student_number);
+        printf("\nMatrikelnr.:\t%d",s1->student_number);
         if(s1->next == NULL)                    /* Leerzeile wird nach letztem Student geprintet*/
         {
             printf("\n");
@@ -312,7 +312,7 @@ void printSingleStudentInformation(struct student *s1){
     printf("\nGeburtsdatum:\t%s.%s.%s", s1->birthday.day, s1->birthday.month, s1->birthday.year);
     printf("\nStartdatum:\t%s.%s.%s", s1->start.day, s1->start.month, s1->start.year);
     printf("\nEnddatum:\t%s.%s.%s", s1->end.day, s1->end.month, s1->end.year);
-    printf("\nMatrikelnr.: %d",s1->student_number);
+    printf("\nMatrikelnr.:\t%d",s1->student_number);
 }
 
 void printStudent(int student_number, struct student* s1)
