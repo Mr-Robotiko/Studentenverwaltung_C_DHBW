@@ -349,7 +349,7 @@ void interfaceSwitch(int choice, struct student **s1) {
         addStudent(s1);
         break;
     case '2':
-        printf("------------------- <2> Studenten anzeigen <4> -------------------");
+        printf("------------------- <2> Studenten anzeigen <2> -------------------");
         printf("\nWelchen Studenten moechten Sie angezeigt bekommen? (Matrikelnummer): ");
         scanf("%d", &student_number);
         printStudent(student_number, *s1);
@@ -364,7 +364,7 @@ void interfaceSwitch(int choice, struct student **s1) {
         deleteStudent(student_number, s1);
         break;
      case '5': 
-        printf("------------------- <5> Anzahl aktueller Studenten <5> -------------------");
+        printf("--------------- <5> Anzahl aktueller Studenten <5> ---------------");
         printf("\nAktuell gespeicherte Studenten: %d\n", countStudents(*s1));
         break;
     case 'x':
