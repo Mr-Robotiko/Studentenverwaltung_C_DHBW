@@ -3,12 +3,14 @@
 #include <string.h>
 #include "error_handling.h" // Selbstgeschriebene Headerfile -> Muss mit geliefert werden
 
+/// @brief Datenstruktur für Startdatum, Enddatum und Geburtsdatum
 struct Date {
     char day[3]; 
     char month[3]; 
     char year[5];
 };
 
+/// @brief Studentenstruktur mit einer doppelt verketteten Liste (prevoius ,next)
 struct student {
     char first_name[50];
     char last_name[50];
@@ -21,6 +23,7 @@ struct student {
     struct student *next;
 };
 
+/// @brief Sucht den Prevoius Student um ihn alphabetisch in die Liste zu sortieren
 struct student* findPrevForInsertion(struct student* sNew, struct student* s1) 
 {    
     struct student *current = s1;
@@ -41,6 +44,9 @@ struct student* findPrevForInsertion(struct student* sNew, struct student* s1)
     return current;
 }
 
+/// @brief Zählt die Anzahl an vorhandenen Studenten in der Liste
+/// @param s1 
+/// @return Anzahl der Sudenten 
 int countStudents(struct student *s1) {
     int count = 0;
     struct student *current = s1;
@@ -53,11 +59,13 @@ int countStudents(struct student *s1) {
     return count;  
 }
 
-
+/// @brief Öffnet ein Formular für die Eingabe der Studenteninformationen. Durch Q wird das Formular geschlosssen
+/// @param sNew 
+/// @return 
 int inputStudent(struct student* sNew) {
-    int checkString = 0;
-    int checkDate = 0;
-    int whichDate = 0;
+    int checkString = 0; // Validierung der Stringeingaben
+    int checkDate = 0; // Validierung der Datumseingaben
+    int whichDate = 0; // Validierung der Datumslogik
 
     // Eingabeaufforderung für den Benutzer
     printf("----------------- <1> Studenten hinzufuegen <1> -----------------");
@@ -72,7 +80,7 @@ int inputStudent(struct student* sNew) {
         sNew->first_name[0] = toupper(sNew->first_name[0]);
         sNew->first_name[strcspn(sNew->first_name, "\n")] = '\0';
         if (strcmp(sNew->first_name, "Q") == 0) {
-            return 0;  //Hab abbruch mittendrin eingebaut
+            return 0;
         }
         checkString = checkInputString(sNew->first_name);
         if (checkString) {
@@ -87,7 +95,7 @@ int inputStudent(struct student* sNew) {
         sNew->last_name[0] = toupper(sNew->last_name[0]);
         sNew->last_name[strcspn(sNew->last_name, "\n")] = '\0';
         if (strcmp(sNew->last_name, "Q") == 0) {
-            return 0;  //Hab abbruch mittendrin eingebaut
+            return 0;
         }
         checkString = checkInputString(sNew->last_name);
         if (checkString) {
@@ -98,10 +106,11 @@ int inputStudent(struct student* sNew) {
     // Studiengang
     do {
         printf("\n(Zum Abbrechen: q)\nWelches Studienfach wird belegt?: ");
-        scanf("%99s", sNew->course);
+        fgets(sNew->course, sizeof(sNew->course), stdin);
         sNew->course[0] = toupper(sNew->course[0]);
+        sNew->course[strcspn(sNew->course, "\n")] = '\0';
         if (strcmp(sNew->course, "Q") == 0) {
-            return 0;  //Hab abbruch mittendrin eingebaut
+            return 0;
         }
         checkString = checkInputString(sNew->course);
         if (checkString) {
@@ -114,7 +123,7 @@ int inputStudent(struct student* sNew) {
         printf("\n(Zum Abbrechen: q)\nWie lautet das Geburtsdatum? (TT.MM.JJJJ): ");
         scanf("%2s.%2s.%4s", sNew->birthday.day, sNew->birthday.month, sNew->birthday.year);
         if (strcmp(sNew->birthday.day, "q") == 0) {
-            return 0;  //Hab abbruch mittendrin eingebaut
+            return 0;
         }
         checkDate = checkInputDate(sNew->birthday.day, sNew->birthday.month, sNew->birthday.year, whichDate, NULL, NULL, NULL);
         if (checkDate == 0) {
@@ -142,7 +151,7 @@ int inputStudent(struct student* sNew) {
         printf("\n(Zum Abbrechen: q)\nGeben Sie das Enddatum ein (TT.MM.JJJJ): ");
         scanf("%2s.%2s.%4s", sNew->end.day, sNew->end.month, sNew->end.year);
         if (strcmp(sNew->end.day, "q") == 0) {
-            return 0;  //Hab abbruch mittendrin eingebaut
+            return 0;
         }
         checkDate = checkInputDate(sNew->end.day, sNew->end.month, sNew->end.year, whichDate, sNew->start.day, sNew->start.month, sNew->start.year);
         if (checkDate == 0) {
@@ -157,7 +166,7 @@ int inputStudent(struct student* sNew) {
 
 /// @brief Sucht die maximale Studentennummer und gibt sie zurück
 /// @param s1 
-/// @return max
+/// @return maximale Studentennummer
 int findMaxStudentNumber(struct student* s1)
 {
     struct student* current = s1;
@@ -171,10 +180,13 @@ int findMaxStudentNumber(struct student* s1)
     return max;
 }
 
+/// @brief Löscht einen Studenten auf Basis seiner generierten Matrikelnummer. 
+/// @param student_number 
+/// @param s1 
 void deleteStudent(int student_number, struct student **s1) {
     struct student *current = *s1;
 
-    // Fall: Die Liste ist leer
+    // Die Liste ist leer
     if (current == NULL) {
         printf("\n***Keine Studenten in der Liste***\n");
         return;
@@ -182,13 +194,13 @@ void deleteStudent(int student_number, struct student **s1) {
 
     while (current != NULL) {
         if (current->student_number == student_number) {
-            // Wenn es das erste Element ist, aktualisiere den Kopf der Liste
+            // Das löschende Element ist Kopf der Liste
             if (current == *s1) {
                 *s1 = current->next;
                 if (*s1 != NULL) {
                     (*s1)->previous = NULL;
                 }
-            // Ansonsten Lösche Element der Liste
+            // Das löschende Element ist am Ende oder in der Mitte der Liste
             } else {
                 if (current->previous != NULL) {
                     current->previous->next = current->next;
@@ -266,7 +278,7 @@ if (sNew->student_number == 99999999)
     free(sNew);
     printf("***Das System ist voll, neuer Student konnte nicht gespeichert werden***");
     return;
-}else sNew->student_number = max + 1;
+}else sNew->student_number = max + 1; // Matrikelnummer um 1 erhöhen
 
     }
 }
@@ -275,7 +287,7 @@ if (sNew->student_number == 99999999)
 /// @param s1 
 void printAllStudents(struct student *s1) {
     printf("---------------- <3> Alle Studenten anzeigen <3> ----------------");
-    if(s1 == NULL)                          /* Gibt es ueberhaupt schon einen eingefuegten Studenten?*/
+    if(s1 == NULL) // Wenn die Liste leer ist
     {
         printf("\n***Aktuell wurde noch kein Student hinzugefuegt***\n");
     }
@@ -288,11 +300,11 @@ void printAllStudents(struct student *s1) {
         printf("\nStartdatum:\t%s.%s.%s", s1->start.day, s1->start.month, s1->start.year);
         printf("\nEnddatum:\t%s.%s.%s", s1->end.day, s1->end.month, s1->end.year);
         printf("\nMatrikelnr.:\t%d",s1->student_number);
-        if(s1->next == NULL)                    /* Leerzeile wird nach letztem Student geprintet*/
+        if(s1->next == NULL)  /* Leerzeile wird nach letztem Student geprintet*/
         {
             printf("\n");
         }
-        if(s1->next != NULL)                            /* Wenn nur ein Student vorhanden ist, wird diese Linie nicht ausgegeben, sie ist nur Trenner zw. Student x und Student x+1*/
+        if(s1->next != NULL)   /* Wenn nur ein Student vorhanden ist, wird diese Linie nicht ausgegeben, sie ist nur Trenner zw. Student x und Student x+1*/
         {
         printf("\n---------------------------");
         }
@@ -305,6 +317,8 @@ void printAllStudents(struct student *s1) {
     }
 }
 
+/// @brief Printlayout für die Ausgabe eines einzelnen Studenten
+/// @param s1 
 void printSingleStudentInformation(struct student *s1){
     printf("\nVorname:\t%s", s1->first_name);
     printf("\nNachname:\t%s", s1->last_name);
@@ -315,12 +329,15 @@ void printSingleStudentInformation(struct student *s1){
     printf("\nMatrikelnr.:\t%d",s1->student_number);
 }
 
+/// @brief Gibt die Information eines einzelnen Studenten auf Baiss seiner Matrikrlnummer wieder
+/// @param student_number 
+/// @param s1 
 void printStudent(int student_number, struct student* s1)
 {
-    int found = 0;
+    int found = 0; // Wenn Student nicht gefunden
     struct student* current = s1;
 
-    // Fall: Die Liste ist leer
+    // Liste ist leet
     if (current == NULL) {
         printf("\n***Keine Studenten in der Liste***\n");
         return;
@@ -341,6 +358,9 @@ void printStudent(int student_number, struct student* s1)
     if(found == 0) printf("\n***Matrikelnummer nicht gefunden***\n");
 }
 
+/// @brief Die Interfacelogik zusammen mit dem Interface der Menüpunkte
+/// @param choice 
+/// @param s1 
 void interfaceSwitch(int choice, struct student **s1) {
     int student_number = 0;
 
@@ -379,6 +399,9 @@ void interfaceSwitch(int choice, struct student **s1) {
     }
 }
 
+/// @brief Ausgebe des Interfaces 
+/// @param choice 
+/// @param s1 
 void interface(struct student **s1) {
     char choice;
     
@@ -396,6 +419,8 @@ void interface(struct student **s1) {
     }
 }
 
+/// @brief Sichert die Element der Liste in einer CSV Datei
+/// @param s1 
 void save(struct student *s1) {
     FILE *file = fopen("students.csv", "w");
     
@@ -422,6 +447,8 @@ void save(struct student *s1) {
     fclose(file);
 }
 
+/// @brief Liest die Element der CSV Datei und schreibt sie in die Liste
+/// @param s1 
 void read(struct student **s1) {
     FILE *file = fopen("students.csv", "r");
     if (file == NULL) return; 
@@ -463,6 +490,8 @@ void read(struct student **s1) {
     fclose(file);
 }
 
+/// @brief Befreit den Speicherplatz von allen Studenten
+/// @param s1 
 void freeAllStudents(struct student *s1) {
     while (s1 != NULL) {
         struct student *temp = s1;

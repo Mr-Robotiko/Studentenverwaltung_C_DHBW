@@ -3,7 +3,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-// Überprüft, ob der String nur gültige Zeichen (Buchstaben) enthält
+/// @brief Prüft, ob ein String nur valide Charaktere enthält
+/// @param input 
+/// @return 
 int checkInputString(char *input) {
     for (int i = 0; i < strlen(input); i++) {
         if (!isalpha(input[i]) && input[i] != ' ' && input[i]!= '-') {
@@ -13,6 +15,11 @@ int checkInputString(char *input) {
     return 0; // Gültiger String
 }
 
+/// @brief Prüft, ob Student 18 Jahre alt ist
+/// @param intDay 
+/// @param intMonth 
+/// @param intYear 
+/// @return 
 int is18YearsOld(int intDay, int intMonth, int intYear) {
     // Hole das aktuelle Datum
     time_t t = time(NULL);
@@ -31,6 +38,15 @@ int is18YearsOld(int intDay, int intMonth, int intYear) {
     return age >= 18;
 }
 
+/// @brief Prüft, ob das Datum aus validen Zeichen besteht und die Reihenfolge eingehalten wird.
+/// @param day 
+/// @param month 
+/// @param year 
+/// @param whichDate 
+/// @param compareday 
+/// @param comparemonth 
+/// @param compareyear 
+/// @return 
 int checkInputDate(char *day, char *month, char *year, int whichDate, char *compareday, char *comparemonth, char *compareyear) {
     int intDay = atoi(day);
     int intMonth = atoi(month);
