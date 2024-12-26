@@ -70,15 +70,16 @@ int inputStudent(struct student* sNew) {
     // Eingabeaufforderung für den Benutzer
     printf("----------------- <1> Studenten hinzufuegen <1> -----------------");
 
+    int c; //Buffer clearen
+    while ((c = getchar()) != '\n' && c != EOF);
+
     // Vorname
     do {
         printf("\n(Zum Abbrechen: q)\nWie lautet der Vorname?: ");
-        int c; //Buffer clearen
-        while ((c = getchar()) != '\n' && c != EOF);
 
         fgets(sNew->first_name, sizeof(sNew->first_name), stdin);
-        sNew->first_name[0] = toupper(sNew->first_name[0]);
         sNew->first_name[strcspn(sNew->first_name, "\n")] = '\0';
+        sNew->first_name[0] = toupper(sNew->first_name[0]);
         if (strcmp(sNew->first_name, "Q") == 0) {
             return 0;
         }

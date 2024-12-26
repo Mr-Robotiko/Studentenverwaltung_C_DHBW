@@ -65,10 +65,10 @@ int checkInputDate(char *day, char *month, char *year, int whichDate, char *comp
     if ((intYear < 1960 || intYear > 2024) && whichDate == 0) return 0;
 
     // Überprüfe gültigen Bereich des Startjahres
-    if ((intYear < 1980 || intYear > 2024) && whichDate == 2) return 0;
+    if ((intYear < 1980 || intYear >= 2025) && whichDate == 2) return 0;
 
    // Überprüfe gültigen Bereich des Endjahres
-    if((intYear <=2024 || intYear >= 2028) && whichDate == 1) return 0;
+    if((intYear < 1980 || intYear >= 2030) && whichDate == 1) return 0;
 
     // Überprüfe gültigen Bereich des Monats
     if (intMonth < 1 || intMonth > 12) return 0;
@@ -93,6 +93,23 @@ int checkInputDate(char *day, char *month, char *year, int whichDate, char *comp
     int compareDay = atoi(compareday);
     int compareMonth = atoi(comparemonth);
     int compareYear = atoi(compareyear);
+
+    // Prüft, ob Startdatum mindestens 18 Jahre nach Geburt liegt
+    if ((intYear - compareYear) < 18) {
+        return 0;
+    }
+    if ((intYear - compareYear) == 18) {
+        if (intMonth < compareMonth) {
+            return 0; 
+        }
+        if (intMonth == compareMonth) {
+    
+            if (intDay < compareDay) {
+                return 0; 
+            }
+        }
+    }
+
 
      if (intYear < compareYear) {
         return 0;
